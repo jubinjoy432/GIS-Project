@@ -1,0 +1,146 @@
+:root {
+    --bg-dark: #121212;
+    --bg-panel: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --accent: #00d4ff;
+    --accent-warn: #ffcc00;
+    --accent-danger: #ff4444;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 350px;
+    background-color: var(--bg-panel);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    /* Allow scrolling if content is too tall */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--accent);
+}
+
+.header p {
+    margin: 5px 0 20px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.stat-card {
+    background: #2a2a2a;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-card h2 {
+    margin: 10px 0 0 0;
+    font-size: 2.5rem;
+    color: var(--text-primary);
+}
+
+.chart-container {
+    flex-grow: 1;
+    min-height: 200px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.alerts-panel {
+    background: #2a2a2a;
+    padding: 15px;
+    border-radius: 12px;
+    height: 150px;
+    overflow-y: auto;
+}
+
+.alerts-panel h3 {
+    margin-top: 0;
+    font-size: 1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+#alerts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+#alerts-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #333;
+}
+
+/* Map Styling */
+.map-view {
+    flex-grow: 1;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.overlay-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.live-indicator {
+    color: var(--accent-danger);
+    font-weight: bold;
+    font-size: 0.8rem;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart City Traffic Monitor</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar / Stats Panel -->
+        <aside class="sidebar">
+            <div class="header">
+                <h1>🚦 TrafficAI</h1>
+                <p>Live City Analysis</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Vehicles Detected</h3>
+                <h2 id="total-count">0</h2>
+            </div>
+
+            <!-- Live Feed Placeholder -->
+            <div class="live-feed-card"
+                style="background: #2a2a2a; border-radius: 12px; margin-bottom: 20px; overflow: hidden; flex-shrink: 0;">
+                <h3
+                    style="padding: 10px 15px; margin: 0; font-size: 0.9rem; color: #aaaaaa; border-bottom: 1px solid #444;">
+                    Seaport-Airport Rd (CAM_002)</h3>
+                <div style="background: #000; position: relative;">
+                    <img src="/video_feed/CAM_002" style="width: 100%; height: auto; display: block;">
+                    <div class="rec-dot"
+                        style="position: absolute; top: 10px; right: 10px; width: 10px; height: 10px; background: red; border-radius: 50%; animation: pulse 1s infinite;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="vehicleChart"></canvas>
+            </div>
+
+            <div class="alerts-panel">
+                <h3>Active Alerts</h3>
+                <ul id="alerts-list">
+                    <li>System Online...</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Map Area -->
+        <main class="map-view">
+            <div id="map"></div>
+            <div class="overlay-controls">
+                <span class="live-indicator">● LIVE FEED</span>
+            </div>
+        </main>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
