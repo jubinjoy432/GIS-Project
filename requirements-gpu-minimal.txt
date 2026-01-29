@@ -1,0 +1,14 @@
+# Minimal GPU-accelerated dependencies (smaller download size)
+# For CUDA 12.4+ / CUDA 13.x
+# Install with: pip install --no-cache-dir -r requirements-gpu-minimal.txt
+
+# PyTorch with CUDA 12.4 support (compatible with CUDA 13.1)
+# Only torch is needed - ultralytics doesn't require torchvision/torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch
+
+# Core dependencies
+flask
+ultralytics
+opencv-python
+numpy

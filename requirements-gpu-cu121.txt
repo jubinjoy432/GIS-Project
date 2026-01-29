@@ -1,0 +1,14 @@
+# GPU-accelerated dependencies for NVIDIA CUDA 12.1
+# Install with: pip install -r requirements-gpu-cu121.txt
+
+# PyTorch with CUDA 12.1 support
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+torchaudio
+
+# Core dependencies
+flask
+ultralytics
+opencv-python
+numpy
