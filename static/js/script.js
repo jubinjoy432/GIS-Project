@@ -22,7 +22,98 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Chat Widget Logic
+    const chatWidget = document.getElementById('chat-widget');
+    const chatFab = document.getElementById('chat-fab');
+    const chatWindow = document.getElementById('chat-window');
+    const closeChatBtn = document.getElementById('close-chat');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+
+    if (chatFab) {
+        chatFab.addEventListener('click', () => {
+            chatWindow.classList.remove('hidden');
+            chatFab.style.display = 'none'; // Hide FAB when open
+            chatInput.focus();
+        });
+    }
+
+    if (closeChatBtn) {
+        closeChatBtn.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+            chatFab.style.display = 'flex'; // Show FAB
+        });
+    }
+
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+
+        // Parse Markdown for bot messages
+        if (sender === 'bot') {
+            msgDiv.innerHTML = marked.parse(text);
+        } else {
+            msgDiv.innerText = text;
+        }
+
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // 1. Add User Message
+        addMessage(text, 'user');
+        chatInput.value = '';
+
+        // 2. Add Loading Indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.classList.add('message', 'bot');
+        loadingDiv.innerText = 'Thinking...';
+        loadingDiv.id = 'chat-loading';
+        chatMessages.appendChild(loadingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+
+            // Remove Loading
+            const loader = document.getElementById('chat-loading');
+            if (loader) loader.remove();
+
+            // 3. Add AI Response
+            addMessage(data.response, 'bot');
+
+        } catch (error) {
+            console.error('Chat error:', error);
+            const loader = document.getElementById('chat-loading');
+            if (loader) loader.remove();
+            addMessage("Sorry, I'm having trouble connecting right now.", 'bot');
+        }
+    }
+
+    if (sendBtn) {
+        sendBtn.addEventListener('click', handleSendMessage);
+    }
+
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    }
+
     // 1. Initialize Map
+
     // Focusing on Rajagiri Valley/Kochi area
     const map = L.map('map').setView([10.028, 76.308], 15);
 
