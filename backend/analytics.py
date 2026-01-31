@@ -415,4 +415,83 @@ class TrafficAnalyzer:
                 "locations": all_locations
             }
 
+    def get_historical_data(self, time_slot):
+        """
+        Generates mocked historical data based on the time slot.
+        """
+        base_lat = 10.0229
+        base_lng = 76.3095
+        
+        # Profile Configuration
+        profiles = {
+            "morning": {"intensity": 1.0, "time_start": 8, "label": "Morning Peak"}, # High traffic
+            "midday": {"intensity": 0.4, "time_start": 12, "label": "Midday"},       # Moderate
+            "evening": {"intensity": 0.9, "time_start": 17, "label": "Evening Peak"}, # High traffic
+            "night": {"intensity": 0.1, "time_start": 21, "label": "Night"}           # Low traffic
+        }
+        
+        profile = profiles.get(time_slot, profiles["midday"])
+        intensity_factor = profile["intensity"]
+        
+        # 1. Generate Heatmap Data (Locations)
+        # Use existing road points (dummy_nodes) + camera locations
+        heatmap_points = []
+        
+        # Helper to generate random consistent load for a point
+        def get_load(base_load, variance=10):
+            return max(0, int(base_load * intensity_factor + random.randint(-variance, variance)))
+
+        # Real Cameras
+        for cam in self.camera_config:
+            # Base load for a main road like Seaport-Airport Rd might be ~50 cars
+            load = get_load(60) 
+            heatmap_points.append({
+                "lat": cam['lat'], 
+                "lng": cam['lng'], 
+                "name": cam['name'],
+                "value": load,
+                # Normalize for heatmap (0-1 range roughly, or raw count) -> Frontend handles scaling usually
+                # But simple logic: >50 is RED.
+                "intensity": min(1.0, load / 60.0) 
+            })
+            
+        # Dummy Nodes (Simulated Roads)
+        for node in self.dummy_nodes:
+            # Smaller roads, base load ~30
+            load = get_load(30)
+            heatmap_points.append({
+                "lat": node['lat'],
+                "lng": node['lng'],
+                "name": f"Road Node {node['id']}",
+                "value": load,
+                "intensity": min(1.0, load / 40.0)
+            })
+
+        # 2. Generate Trend Chart Data (Time vs Count)
+        # Generate 2 hours of data points (e.g., every 15 mins)
+        trend_data = []
+        start_hour = profile["time_start"]
+        
+        for i in range(8): # 8 points = 2 hours roughly (15 min intervals)
+            # Create a time label
+            minutes = (i * 15) % 60
+            hour = start_hour + (i * 15) // 60
+            time_label = f"{hour:02d}:{minutes:02d}"
+            
+            # Simple curve: rise then fall slightly or steady
+            # adding some sine wave variation + random noise
+            variation = random.randint(-5, 10)
+            timestamp_val = int(80 * intensity_factor) + variation # Base volume
+            
+            trend_data.append({
+                "time": time_label,
+                "count": max(10, timestamp_val)
+            })
+            
+        return {
+            "heatmap": heatmap_points,
+            "trend": trend_data,
+            "period_label": profile["label"]
+        }
+
 traffic_system = TrafficAnalyzer(mode="auto")

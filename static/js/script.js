@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update Map Markers
         markersLayer.clearLayers();
-        const alertsList = document.getElementById('alerts-list');
-        alertsList.innerHTML = ''; // Clear old alerts
+        markersLayer.clearLayers();
+
 
         data.locations.forEach(loc => {
             const isLive = loc.source_type === 'live_cctv';
@@ -170,12 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             markersLayer.addLayer(marker);
 
-            // Add Side Panel Alert if High Traffic AND Live/Significant
-            if (loc.intensity === 'high' && (isLive || loc.total > 45)) {
-                const li = document.createElement('li');
-                li.innerHTML = `<strong style="color: #ff4444;">CONGESTION:</strong> ${loc.name}`;
-                alertsList.appendChild(li);
-            }
+
         });
     }
 

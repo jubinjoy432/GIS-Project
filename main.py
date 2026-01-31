@@ -17,5 +17,15 @@ def video_feed(camera_id):
     return Response(traffic_system.generate_frames(camera_id),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/insights')
+def insights():
+    return render_template('insights.html')
+
+@app.route('/api/history')
+def get_history():
+    from flask import request
+    slot = request.args.get('slot', 'morning')
+    return jsonify(traffic_system.get_historical_data(slot))
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
